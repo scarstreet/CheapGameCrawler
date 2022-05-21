@@ -1,0 +1,24 @@
+1. main html
+2. search
+3. crawl
+4. create new html from results
+
+# display an image label
+photo = tk.PhotoImage(file='./assets/python.png')
+image_label = ttk.Label(
+    root,
+    image=photo,
+    text='Python',
+    compound='top'
+)
+image_label.pack()
+
+# Button with icon
+download_icon = tk.PhotoImage(file='./assets/download.png')
+download_button = ttk.Button(
+    root,
+    image=download_icon,
+    text='Download',
+    compound=tk.LEFT,
+    command=download_clicked
+)

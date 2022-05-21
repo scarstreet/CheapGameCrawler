@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <py-env>
+      - paths:
+        - /crawler.py
+    </py-env>
+  </head>
+  <body>
+    <h1>GameCrawler</h1>
+    <input class="text-input" type="text" id="search" name="lname">
+    <button id="searchButton" pys-onClick="runHi" onmousedown="die()"> search </button>
+    <p id="json-data">adwdad</p>
+    <py-script>
+      from crawler import hi
+      from js import console
+      
+      def runHi(evt):
+        searchInput = Element('search').element.value
+        console.log("search input is "+searchInput)
+        Element('json-data').element.innerHTML = "yellow"
+    </py-script>
+    <div id="content"></div>
+    <script>
+      async function die() {
+        var current = document.getElementById("json-data").innerHTML;
+        // while(document.getElementById("json-data").innerHTML == current){}
+        console.log("I AM DEAD");
+      }
+      var content = document.getElementById("content");
+      var h = document.createElement("h1");
+      h.appendChild(document.createTextNode("TEST"));
+      content.appendChild(h);
+      console.log(content);
+    </script>
+  </body>
+  </html>

@@ -1,0 +1,8 @@
+.text-input {
+    outline: none;
+    border: 0px;
+    border-bottom: 1px solid black;
+}
+/* input:focus, textarea:focus, select:focus{
+    outline: none;
+} */
