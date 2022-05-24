@@ -1,3 +1,5 @@
+from cmath import inf
+from locale import currency
 import requests, re
 from db import webs
 from bs4 import BeautifulSoup as bs
@@ -12,6 +14,9 @@ class Format:
         self.price = re.compile(format['RE_price'])
         self.image = re.compile(format['RE_image'])
         self.title = re.compile(format['RE_title'])
+        
+        self.currency = format['currency']
+        self.toNTD = format['toNTD']
 
     def findInfos(self,html):
         data = []
@@ -26,6 +31,9 @@ class Format:
                     info['price'] = '-'
                 else:
                     info['price'] = info['price'][0]
+                    if(self.currency != 'NTD'):
+                        info['price'] = self.numbersOnly.findall(info['price'])[0]
+                        info['price'] = f"NT$ {(float(info['price'].replace(',',''))*self.toNTD):.2f}"
                 info['title'] = self.title.findall(el)[0]
                 info['image'] = self.image.findall(el)[0]
                 data.append(info)
@@ -38,6 +46,10 @@ class Format:
     price = ''
     image = ''
     title = ''
+    
+    currency = ''
+    toNTD = ''
+    numbersOnly = re.compile('[\d\.,]+')
 
 class Web:
     def __init__(self, name, url, format):

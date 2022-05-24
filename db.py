@@ -2,9 +2,9 @@ webs = [
     {
         "name":'Epic Games',
         "url":'https://store.epicgames.com/',
-        "currency":'NTD',
-        "toNTD":1,
         "format":{
+            "currency":'NTD',
+            "toNTD":1,
             "requestURL" : 'https://store.epicgames.com/en-US/browse?q= &sortBy=relevancy&sortDir=DESC&count=40',
             "urlSpace": '%20',
             "RE_element":'(<li class=\"css-lrwy1y\".*?</li>)',
@@ -17,9 +17,9 @@ webs = [
     {
         "name":'Steam',
         "url":'https://store.steampowered.com/',
-        "currency":'NTD',
-        "toNTD":1,
         "format":{
+            "currency":'NTD',
+            "toNTD":1,
             "requestURL" : 'https://store.steampowered.com/search/?term=',
             "urlSpace": '+',
             "RE_element":'(<a.*?search_result_row.*?</a>)',
@@ -27,6 +27,21 @@ webs = [
             "RE_image" : '<img src=\"(.*?)\".*?>',
             "RE_title" : '<span class=\"title\">(.*?)</span>',
             "RE_notFound": '0 results match your search',
+        }
+    },
+    {
+        "name": 'GOG.com',
+        "url": 'https://www.gog.com/en',
+        "format": {
+            "currency": 'USD',
+            "toNTD": 29.6,
+            "requestURL": 'https://www.gog.com/en/games?query= &order=desc:score',
+            "urlSpace": '%20',
+            "RE_element": '(<product.*?product-tile>)',
+            "RE_price": 'id=\"productTileFinalPrice\">.*?(FREE|\$[\d.,]+)',
+            "RE_image": ' type=\"image/webp\" class=\"ng-star-inserted\"><source srcset=\"https://images\.gog-statics\.com/.*?\.jpg, (.*?\.jpg 2x\") type=\"image/jpeg\" class=\"ng-star-inserted\">',
+            "RE_title": '<p class=\"product-tile__title\" title=\"(.*?)\"',
+            "RE_notFound": 'We couldn’t find anything matching your criteria',
         }
     },
 ]
