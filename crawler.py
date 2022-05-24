@@ -1,6 +1,5 @@
-from cmath import inf
-from locale import currency
 import requests, re
+import time
 from db import webs
 from bs4 import BeautifulSoup as bs
 from selenium import webdriver
@@ -22,6 +21,7 @@ class Format:
         data = []
         if(len(self.not_found.findall(html)) == 0):
             elements = self.element.findall(html)
+            print("ELEMENT LEN = "+len(elements))
             if(len(elements) > 10):
                 elements = elements[:10]
             for el in elements:
@@ -88,7 +88,8 @@ def search(toSearch):
         print(web['name']+" DONE!!!")
     return results
 
-results = search('apex')
+results = search('csgo')
+time.sleep(20)
 for r in results:
     print(r+" =================================================")
     for rr in results[r]:
