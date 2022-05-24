@@ -19,9 +19,9 @@ class Format:
 
     def findInfos(self,html):
         data = []
-        if(len(self.not_found.findall(html)) == 0):
+        if(len(self.not_found.findall(html)) != 1):
             elements = self.element.findall(html)
-            print("ELEMENT LEN = "+len(elements))
+            print("ELEMENT LEN = "+str(len(elements)))
             if(len(elements) > 10):
                 elements = elements[:10]
             for el in elements:
@@ -88,8 +88,7 @@ def search(toSearch):
         print(web['name']+" DONE!!!")
     return results
 
-results = search('csgo')
-time.sleep(20)
+results = search('cod')
 for r in results:
     print(r+" =================================================")
     for rr in results[r]:
