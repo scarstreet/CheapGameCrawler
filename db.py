@@ -59,8 +59,19 @@ webs = [
             "RE_notFound": 'No matching products found',
         }
     },
+    {
+        "name": 'CDKeys',
+        "url": 'https://www.cdkeys.com/',
+        "format": {
+            "currency": 'GBP',
+            "toNTD": 37.15,
+            "requestURL": 'https://www.cdkeys.com/?q=',
+            "urlSpace": '%20',
+            "RE_element": '(<li class=\"ais-InfiniteHits-item product-item__in-region\".*?</li>)',
+            "RE_price": 'class=\"after_special.*? \"> (£[\d\.]+)',
+            "RE_image": 'itemprop=\"url\">\s+<img itemprop=\"image\" src=\"(.*?)\"',
+            "RE_title": 'itemprop=\"url\">\s+<img itemprop=\"image\" src=\".*?\" alt=\"(.*?)\"',
+            "RE_notFound": 'Sorry, no results found',
+        }
+    },
 ]
-
-
-
-
