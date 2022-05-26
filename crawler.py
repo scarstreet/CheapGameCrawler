@@ -1,14 +1,13 @@
 import requests, re
 import time
 from db import webs
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup as bs
 from selenium import webdriver
 import pandas as pd
 
 class Format:
     def __init__(self, format):
-        # self.redirect_url = re.compile(format['RE_redirectURL'])
-        # self.priceFormat = re.compile(format['RE_priceFormat'])
         self.not_found = re.compile(format['RE_notFound'])
         self.element = re.compile(format['RE_element'])
         self.price = re.compile(format['RE_price'])
@@ -22,7 +21,6 @@ class Format:
         data = []
         if(len(self.not_found.findall(html)) != 1):
             elements = self.element.findall(html)
-            # print("ELEMENT LEN = "+str(len(elements)))
             if(len(elements) > 10):
                 elements = elements[:10]
             for el in elements:
@@ -54,14 +52,6 @@ class Format:
     toNTD = ''
     numbersOnly = re.compile('[\d\.,]+')
 
-class Web:
-    def __init__(self, name, url, format):
-        for form in format:
-            # TODO - make the format classes here from a dictionary
-            pass
-        pass
-    store_name = ''
-
 def toSearchURL(toSearch,web):
     searchInput = web['format']['urlSpace'].join(toSearch.split(' '))
     url = web['format']['requestURL'].split(' ')
@@ -79,8 +69,9 @@ def getHTML(url, browser):
 def search(toSearch):
     results = {}
     driverPath = 'chromedriver.exe'
-    browser = webdriver.Chrome(driverPath)
-    # browser.set_window_position(-10000,0)
+    options = Options()
+    options.headless = True
+    browser = webdriver.Chrome(driverPath, options=options)
 
     for web in webs:
         url = toSearchURL(toSearch,web)
@@ -88,9 +79,7 @@ def search(toSearch):
         format = Format(web['format'])
         data = format.findInfos(html)
         results[web['name']]=data
-        # print(web['name']+" DONE!!!")
     for result in results:
-        # print("Changing "+result+" to DF")
         if(len(results[result]) > 0):
             results[result] = toDF(results[result])
             results[result] = downloadImages(results[result], result)
@@ -98,7 +87,6 @@ def search(toSearch):
 
 def toDF(dict):
     df = pd.DataFrame(dict)
-    # df['price'] = df['price'].str.slice(start=4)
     df.loc[df["price"] == "", "price"] = '0'
     data = []
     for d in df['price']:
@@ -116,21 +104,5 @@ def downloadImages(df, name):
         with open(f'images\\{name}-{id}.png', 'wb') as handler:
             handler.write(img_data)
         data.append(f'images\\{name}-{id}.png')
-    # print(data)
     df['imgPath'] = data
-    # print(df['imgPath'])
-    # print()
     return df
-
-# results = search('assassin\'s creed unity')
-# print()
-# print()
-
-
-    
-    
-# for r in results:
-#     if(type(results[r]) != type([])):
-#         print(r+" ================================================= ")
-#         print(results[r])
-#         print()
