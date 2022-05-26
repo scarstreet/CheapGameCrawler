@@ -3,6 +3,7 @@ import time
 from db import webs
 from bs4 import BeautifulSoup as bs
 from selenium import webdriver
+import pandas as pd
 
 class Format:
     def __init__(self, format):
@@ -21,19 +22,21 @@ class Format:
         data = []
         if(len(self.not_found.findall(html)) != 1):
             elements = self.element.findall(html)
-            print("ELEMENT LEN = "+str(len(elements)))
+            # print("ELEMENT LEN = "+str(len(elements)))
             if(len(elements) > 10):
                 elements = elements[:10]
             for el in elements:
                 info = {}
                 info['price'] = self.price.findall(el)
                 if(len(info['price']) == 0):
-                    info['price'] = '-'
+                    info['price'] = '0'
                 else:
                     info['price'] = info['price'][0]
+                    if(info['price'] == 'Free' or info['price'] == 'FREE' or info['price'] == 'Free To Play'):
+                        info['price'] = '0' 
+                    info['price'] = self.numbersOnly.findall(info['price'])[0]
                     if(self.currency != 'NTD'):
-                        info['price'] = self.numbersOnly.findall(info['price'])[0]
-                        info['price'] = f"NT$ {(float(info['price'].replace(',',''))*self.toNTD):.2f}"
+                        info['price'] = f"{(float(info['price'].replace(',',''))*self.toNTD):.2f}"
                 info['title'] = self.title.findall(el)[0]
                 info['image'] = self.image.findall(el)[0]
                 data.append(info)
@@ -85,11 +88,49 @@ def search(toSearch):
         format = Format(web['format'])
         data = format.findInfos(html)
         results[web['name']]=data
-        print(web['name']+" DONE!!!")
+        # print(web['name']+" DONE!!!")
+    for result in results:
+        # print("Changing "+result+" to DF")
+        if(len(results[result]) > 0):
+            results[result] = toDF(results[result])
+            results[result] = downloadImages(results[result], result)
     return results
 
-results = search('cod')
-for r in results:
-    print(r+" =================================================")
-    for rr in results[r]:
-        print(rr['title']+" - "+rr['price']+" - "+rr['image'])
+def toDF(dict):
+    df = pd.DataFrame(dict)
+    # df['price'] = df['price'].str.slice(start=4)
+    df.loc[df["price"] == "", "price"] = '0'
+    data = []
+    for d in df['price']:
+        data.append(d.replace(',', ''))
+    df['price'] = pd.Series(data)
+    df['price'] = df['price'].astype('float')
+    df = df.set_index('price')
+    df = df.sort_index()
+    return df
+
+def downloadImages(df, name):
+    data = []
+    for id,d in enumerate(df['image'].values.tolist()):
+        img_data = requests.get(d).content
+        with open(f'images\\{name}-{id}.png', 'wb') as handler:
+            handler.write(img_data)
+        data.append(f'images\\{name}-{id}.png')
+    # print(data)
+    df['imgPath'] = data
+    # print(df['imgPath'])
+    # print()
+    return df
+
+# results = search('assassin\'s creed unity')
+# print()
+# print()
+
+
+    
+    
+# for r in results:
+#     if(type(results[r]) != type([])):
+#         print(r+" ================================================= ")
+#         print(results[r])
+#         print()

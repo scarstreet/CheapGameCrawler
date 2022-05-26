@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+import crawler as cr
 
 root = tk.Tk()
 root.title("Crawley Boi")
@@ -23,7 +24,8 @@ root.resizable(False, False)
 # FUNCTIONS vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 def button_clicked():
-    print(search.get())
+    all = cr.search(search.get())
+    print(all)
 
 # GUI vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
