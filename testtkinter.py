@@ -26,7 +26,7 @@ class ScrollableFrame(ttk.Frame):
 
 global root
 root = tk.Tk()
-root.title("Crawley Boi")
+root.title("Crawly Boi")
 
 window_width = 900
 window_height = root.winfo_screenheight() - 80
@@ -35,11 +35,11 @@ screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
 center_x = int(screen_width/2 - window_width / 2)
-center_y = int(screen_height/2 - window_height / 2)
+center_y = int(screen_height/2 - window_height / 2) - 40
 
 root.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
 
-root.resizable(False, False)
+# root.resizable(False, False)
 
 # TODO - get an icon!!
 # root.iconbitmap('./assets/pythontutorial.ico')
@@ -56,12 +56,13 @@ def changeContent(data):
     for d in data:
         if(len(data[d])!=0):
             data_frame = tk.Frame(content_frame.scrollable_frame)
-            title = tk.Label(data_frame,text=d)
+            title = tk.Label(data_frame,text=d,font=("Impact", 18),bg="#e3631e",fg="#ffffff")
             title.pack(side="top",fill="x")
             for idx,row in enumerate(data[d].to_dict('records')):
                 # while(True):
                 # try:
-                info_frame = tk.Label(data_frame,bg="#0000ff")
+                color = "#e5e5e5" if idx%2 == 0 else "#d4d4d4"
+                info_frame = tk.Label(data_frame,bg=color)
                 print(row)
                 # image = ImageTk.PhotoImage(Image.open(row['imgPath']).resize((200,200),Image.ANTIALIAS))
                 try:
@@ -78,10 +79,9 @@ def changeContent(data):
                     tk.Label(info_frame,image=allImg[-1]).pack(side="left")
                 except:
                     tk.Label(info_frame,bg="#ffffff",text="ImageError!",width=10,height=5,anchor="center").pack(side="left")
-                color = "#ff0000" if idx%2 == 0 else "#00ff00"
                 # canv.create_image(20,20,image=image)
-                tk.Label(info_frame,text=row['title'],bg=color).pack(side="left", expand=True, fill='x')
-                tk.Label(info_frame,text=f"NT$ {row['price']}",bg=color).pack(side="right")
+                tk.Label(info_frame,text=row['title'],font=("Helvatica", 12),bg=color).pack(side="left", expand=True, fill='x')
+                tk.Label(info_frame,text=f"NT$ {row['price']}",font=("Impact", 14),bg=color).pack(side="right")
                 info_frame.pack(side="top", fill='x', expand=True)
                 # except Exception as e:
                 #     print(e)
@@ -89,7 +89,7 @@ def changeContent(data):
             data_frame.pack(side="top", fill='x')
     # placeholdr = tk.Label(text="I tried", bg="#b3b3b3")
     # placeholdr.pack(expand=True, fill="both",side="bottom")
-    content_frame.pack(expand=True, fill="both",side="bottom",anchor="center",padx=100)
+    content_frame.pack(expand=True, fill="both",side="bottom",anchor="center")
 
 def button_clicked():
     all = cr.search(search.get())
@@ -100,7 +100,7 @@ def button_clicked():
 
 mainTitle = tk.Label(root, text="CRAWLY BOI",font=("Impact", 30))
 mainTitle.pack(fill='x', side="top")
-desc = tk.Label(root, text="a webcrawler to look for cheap games from websites",font=("Helvatica", 12))
+desc = tk.Label(root, text="a webcrawler to look for cheap games from websites",font=("Helvatica", 12), fg="#cf4800")
 desc.pack(fill='x', side="top")
 
 global search
@@ -116,7 +116,7 @@ button.pack(side=tk.LEFT, padx=10,pady=20)
 
 global content_frame
 content_frame = tk.Frame(root)
-placeholdr = tk.Label(content_frame,text="Temp text",bg="#b3b3b3")
+placeholdr = tk.Label(content_frame,text="Note : This app takes a while to load.\nPlease don't close the chrome tab during it's loading process",bg="#d4d4d4",fg="#999999")
 placeholdr.pack(expand=True, fill="both",side="bottom")
 content_frame.pack(expand=True, fill="both",side="bottom")
 
