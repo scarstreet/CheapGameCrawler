@@ -95,14 +95,19 @@ def toDF(dict):
     df['price'] = df['price'].astype('float')
     df = df.set_index('price')
     df = df.sort_index()
+    df = df.reset_index()
     return df
 
 def downloadImages(df, name):
     data = []
     for id,d in enumerate(df['image'].values.tolist()):
         img_data = requests.get(d).content
-        with open(f'images\\{name}-{id}.png', 'wb') as handler:
+        namee = name.replace('.', '')
+        end = ".png"
+        if("GOG" in namee):
+            end = ".jpg"
+        with open(f'images\\{namee}-{id}{end}', 'wb') as handler:
             handler.write(img_data)
-        data.append(f'images\\{name}-{id}.png')
+        data.append(f'images/{namee}-{id}{end}')
     df['imgPath'] = data
     return df
