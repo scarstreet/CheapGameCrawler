@@ -70,8 +70,9 @@ def search(toSearch):
     results = {}
     driverPath = 'chromedriver.exe'
     options = Options()
-    options.headless = True
+    # options.headless = True
     browser = webdriver.Chrome(driverPath, options=options)
+    browser.set_window_position(-10000,0)
 
     for web in webs:
         url = toSearchURL(toSearch,web)
@@ -111,3 +112,6 @@ def downloadImages(df, name):
         data.append(f'images/{namee}-{id}{end}')
     df['imgPath'] = data
     return df
+
+# results = search('red dead')
+# print(results)

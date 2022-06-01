@@ -29,7 +29,7 @@ root = tk.Tk()
 root.title("Crawley Boi")
 
 window_width = 900
-window_height = root.winfo_screenheight()
+window_height = root.winfo_screenheight() - 80
 
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
@@ -45,11 +45,14 @@ root.resizable(False, False)
 # root.iconbitmap('./assets/pythontutorial.ico')
 # SETUP^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # FUNCTIONS vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+allImg = []
 
 def changeContent(data):
     global content_frame
+    global allImg
     content_frame.destroy()
     content_frame = ScrollableFrame(root)
+    allImg = []
     for d in data:
         if(len(data[d])!=0):
             data_frame = tk.Frame(content_frame.scrollable_frame)
@@ -57,24 +60,36 @@ def changeContent(data):
             title.pack(side="top",fill="x")
             for idx,row in enumerate(data[d].to_dict('records')):
                 # while(True):
+                # try:
+                info_frame = tk.Label(data_frame,bg="#0000ff")
+                print(row)
+                # image = ImageTk.PhotoImage(Image.open(row['imgPath']).resize((200,200),Image.ANTIALIAS))
                 try:
-                    info_frame = tk.Label(data_frame,bg="#0000ff")
-                    print(row)
-                    image = ImageTk.PhotoImage(Image.open(row['imgPath']))
-                    canv = tk.Canvas(info_frame,width=100, height=100)
-                    canv.pack(side="left")
-                    color = "#ff0000" if idx%2 == 0 else "#00ff00"
-                    canv.create_image(20,20,image=image)
-                    tk.Label(info_frame,text=row['title'],bg=color).pack(side="left")
-                    tk.Label(info_frame,text=f"NT$ {row['price']}",bg=color).pack(side="right")
-                    info_frame.pack(side="top", fill='x')
-                except Exception as e:
-                    print(e)
+                    allImg.append('.')
+                    allImg[-1] = Image.open(row['imgPath'])
+                    w,h = allImg[-1].size
+                    if h >= 50:
+                        ratio = h//50
+                        print(allImg[-1].size,(w//ratio,h//ratio))
+                        allImg[-1] = allImg[-1].resize((w//ratio,h//ratio),Image.ANTIALIAS)
+                    allImg[-1] = ImageTk.PhotoImage(allImg[-1])
+                    # canv = tk.Canvas(info_frame,width=200, height=200)
+                    # canv.pack(side="left")
+                    tk.Label(info_frame,image=allImg[-1]).pack(side="left")
+                except:
+                    tk.Label(info_frame,bg="#ffffff",text="ImageError!",width=10,height=5,anchor="center").pack(side="left")
+                color = "#ff0000" if idx%2 == 0 else "#00ff00"
+                # canv.create_image(20,20,image=image)
+                tk.Label(info_frame,text=row['title'],bg=color).pack(side="left", expand=True, fill='x')
+                tk.Label(info_frame,text=f"NT$ {row['price']}",bg=color).pack(side="right")
+                info_frame.pack(side="top", fill='x', expand=True)
+                # except Exception as e:
+                #     print(e)
             # ttk.Separator(data_frame,orient="horizontal").pack()
-            data_frame.pack()
+            data_frame.pack(side="top", fill='x')
     # placeholdr = tk.Label(text="I tried", bg="#b3b3b3")
     # placeholdr.pack(expand=True, fill="both",side="bottom")
-    content_frame.pack(expand=True, fill="both",side="bottom")
+    content_frame.pack(expand=True, fill="both",side="bottom",anchor="center",padx=100)
 
 def button_clicked():
     all = cr.search(search.get())
