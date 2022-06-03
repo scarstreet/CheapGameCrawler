@@ -7,6 +7,13 @@ CrawlyBoi is a python webcrawling app that mainly uses [TKinter](https://en.wiki
 - [G2A](https://www.g2a.com/)
 -  [CDKeys](https://www.cdkeys.com/)
 
+## Preview
+<span>
+<img src="https://i.ibb.co/5B0X0qj/PV1.png" height="500"/>
+<img src="https://i.ibb.co/qRvd0Hn/PV2.png" height="500"/>
+<img src="https://i.ibb.co/VtdzQXR/PV3.png" height="500"/>
+</span>
+
 ## Prerequisites
 Download and install the following:
 - [Python](https://www.python.org/downloads/)
@@ -25,6 +32,12 @@ Download and install the following:
 4. Enter the name of the game you'd like to search for
 
 5. Wait for the App to crawl the data. DO NOT CLOSE THE CHROME TAB created by the app.
+
+##  TODO List
+- Currency conversion
+- Adding direct clickable links to the app
+- Create a proper executable for this app
+- Add more websites
 
 ## Credits
 Yohanna Astrid Adhipurusa - scarlettstrid@gmail.com
