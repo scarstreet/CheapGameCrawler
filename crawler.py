@@ -7,9 +7,13 @@ from db import webs
 
 import requests, re
 import pandas as pd
+import time
 from selenium import webdriver
 from bs4 import BeautifulSoup as bs
 from selenium.webdriver.chrome.options import Options
+
+global DEBUG
+DEBUG = False
 
 '''======================================================
 A class to define the regex formats of what will
@@ -96,7 +100,8 @@ def search(toSearch):
     driverPath = 'chromedriver.exe'
     options = Options()
     browser = webdriver.Chrome(driverPath, options=options)
-    browser.set_window_position(-10000,0)
+    if not DEBUG:
+        browser.set_window_position(-10000,0)
 
     for web in webs:
         # crawling from each website in the database
@@ -105,6 +110,9 @@ def search(toSearch):
         format = Format(web['format'])
         data = format.findInfos(html)
         results[web['name']]=data
+        if (DEBUG):
+            print(web['name']+'============================================')
+            print(results[web['name']],end='\n\n\n')
     for result in results:
         # Turning existing results to data frames and downloading
         # Their pictures
@@ -126,6 +134,7 @@ def toSearchURL(toSearch,web):
 # getting the searched url's source html
 def getHTML(url, browser):
     browser.get(url)
+    time.sleep(3)
     html = browser.page_source.replace('\n','')
     return html
 
@@ -163,3 +172,6 @@ def downloadImages(df, name):
         data.append(f'images/{namee}-{id}{end}')
     df['imgPath'] = data
     return df
+
+# DEBUG = True
+# search('phasmo')
