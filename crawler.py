@@ -53,28 +53,32 @@ class Format:
             
             # Crawling data from each element
             for el in elements:
-                info = {}
-                # Price ========================================================
-                info['price'] = self.price.findall(el)
-                if(len(info['price']) == 0):
-                    info['price'] = '0'
-                else:
-                    info['price'] = info['price'][0]
-                    if(info['price'] == 'Free' or info['price'] == 'FREE' or info['price'] == 'Free To Play'):
-                        info['price'] = '0' 
-                    info['price'] = self.numbersOnly.findall(info['price'])[0]
-                    if(self.currency != 'NTD'):
-                        info['price'] = f"{(float(info['price'].replace(',',''))*self.toNTD):.2f}"
+                try:
+                    info = {}
+                    # Price ========================================================
+                    info['price'] = self.price.findall(el)
+                    if(len(info['price']) == 0):
+                        info['price'] = '0'
+                    else:
+                        info['price'] = info['price'][0]
+                        if(info['price'] == 'Free' or info['price'] == 'FREE' or info['price'] == 'Free To Play'):
+                            info['price'] = '0' 
+                        info['price'] = self.numbersOnly.findall(info['price'])[0]
+                        if(self.currency != 'NTD'):
+                            info['price'] = f"{(float(info['price'].replace(',',''))*self.toNTD):.2f}"
 
-                # Title ========================================================
-                info['title'] = self.title.findall(el)[0]
+                    # Title ========================================================
+                    print(self)
+                    info['title'] = self.title.findall(el)[0]
 
-                # Image ========================================================
-                # the src link to the image
-                info['image'] = self.image.findall(el)[0]
+                    # Image ========================================================
+                    # the src link to the image
+                    info['image'] = self.image.findall(el)[0]
 
-                # appending the information to a list that will be returned later on
-                data.append(info)
+                    # appending the information to a list that will be returned later on
+                    data.append(info)
+                except Exception as e:
+                    print(e)
         return data
     '''======================================================
     Class Data
@@ -173,5 +177,5 @@ def downloadImages(df, name):
     df['imgPath'] = data
     return df
 
-# DEBUG = True
+DEBUG = True
 # search('phasmo')
